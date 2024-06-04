@@ -1,6 +1,10 @@
-#include <QTextStream>
+#include <QtGui>
+#include <QApplication>
+#include <QLabel>
 
-int main() {
- QTextStream(stdout) << "Hello, world!" << endl;
- return 0;
+int main(int argc, char **argv) {
+ QApplication app(argc, argv);
+ QLabel label("Hello, world!");
+ label.show();
+ return app.exec();
 }
