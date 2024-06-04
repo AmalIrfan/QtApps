@@ -1,10 +1,12 @@
-#include <QtGui>
 #include <QApplication>
-#include <QLabel>
+#include <QPushButton>
 
-int main(int argc, char **argv) {
- QApplication app(argc, argv);
- QLabel label("Hello, world!");
- label.show();
+int main(int argc, char **argv)
+{
+ QApplication app (argc, argv);
+
+ QPushButton button ("Hello world !");
+ button.show();
+
  return app.exec();
 }

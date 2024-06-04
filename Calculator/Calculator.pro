@@ -6,6 +6,7 @@ TEMPLATE = app
 TARGET = Calculator
 INCLUDEPATH += .
 
+QT += core 
 QT += gui
 QT += widgets
 
