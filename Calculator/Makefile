@@ -52,8 +52,11 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = Calculator.cpp 
-OBJECTS       = Calculator.o
+SOURCES       = Calculator.cpp \
+		Window.cpp moc_Window.cpp
+OBJECTS       = Calculator.o \
+		Window.o \
+		moc_Window.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -129,7 +132,8 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/exceptions.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
-		Calculator.pro  Calculator.cpp
+		Calculator.pro Window.hpp Calculator.cpp \
+		Window.cpp
 QMAKE_TARGET  = Calculator
 DESTDIR       = 
 TARGET        = Calculator
@@ -309,7 +313,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents Calculator.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents Window.hpp $(DISTDIR)/
+	$(COPY_FILE) --parents Calculator.cpp Window.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -341,8 +346,14 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 	g++ -pipe -O2 -Wall -W -dM -E -o moc_predefs.h /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all:
+compiler_moc_header_make_all: moc_Window.cpp
 compiler_moc_header_clean:
+	-$(DEL_FILE) moc_Window.cpp
+moc_Window.cpp: Window.hpp \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/global/Projects/QtApps/Calculator/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/global/Projects/QtApps/Calculator -I/home/global/Projects/QtApps/Calculator -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/9 -I/usr/include/x86_64-linux-gnu/c++/9 -I/usr/include/c++/9/backward -I/usr/lib/gcc/x86_64-linux-gnu/9/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include Window.hpp -o moc_Window.cpp
+
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
 compiler_moc_source_make_all:
@@ -355,12 +366,18 @@ compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_moc_predefs_clean 
+compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean 
 
 ####### Compile
 
-Calculator.o: Calculator.cpp 
+Calculator.o: Calculator.cpp Window.hpp
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Calculator.o Calculator.cpp
+
+Window.o: Window.cpp Window.hpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o Window.o Window.cpp
+
+moc_Window.o: moc_Window.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_Window.o moc_Window.cpp
 
 ####### Install
 

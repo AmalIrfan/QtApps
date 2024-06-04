@@ -23,3 +23,5 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 # Input
 SOURCES += Calculator.cpp
+SOURCES += Window.cpp
+HEADERS += Window.hpp

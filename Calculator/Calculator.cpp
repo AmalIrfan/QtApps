@@ -1,17 +1,12 @@
 #include <QApplication>
-#include <QPushButton>
+#include "Window.hpp"
 
 int main(int argc, char **argv)
 {
  QApplication app (argc, argv);
 
- QPushButton button;
- button.setText("Ich leib Informatik!");
- button.setToolTip("I love Computer Science!");
-
- QFont font ("Ubuntu");
- button.setFont(font);
- button.show();
+ Window window;
+ window.show();
 
  return app.exec();
 }
