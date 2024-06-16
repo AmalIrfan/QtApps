@@ -15,10 +15,12 @@ Calculator::Calculator(QWidget *parent)
  display->setFont(font);
 
  mainLayout->addWidget(display, 0, 0, 1, 4);
+ mainLayout->setSizeConstraint(QLayout::SetFixedSize);
 
  auto createButton = [](const std::string text, auto signal, auto obj, auto slot, int row, int col, auto layout)
  {
   QToolButton *button = new QToolButton;
+  button->setFixedSize(50, 50);
   button->setText(text.c_str());
   connect(button, signal, obj, slot);
   layout->addWidget(button, row, col);
