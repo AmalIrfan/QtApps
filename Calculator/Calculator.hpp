@@ -17,12 +17,15 @@ public:
 private slots:
  void digitClicked();
  void plusClicked();
+ void minusClicked();
  void timesClicked();
+ void dividesClicked();
  void equalsClicked();
  void clearClicked();
 
 private:
- QLineEdit *display;
+ QLineEdit *displayA;
+ QLineEdit *displayB;
  int registerA;
  int registerB;
 };

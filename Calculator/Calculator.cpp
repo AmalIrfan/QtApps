@@ -5,16 +5,23 @@ Calculator::Calculator(QWidget *parent)
 {
  QGridLayout *mainLayout = new QGridLayout;
 
- display = new QLineEdit("0");
- display->setReadOnly(true);
- display->setAlignment(Qt::AlignRight);
- display->setMaxLength(15);
+ displayA = new QLineEdit("0");
+ displayA->setReadOnly(true);
+ displayA->setAlignment(Qt::AlignRight);
+ displayA->setMaxLength(15);
 
- QFont font = display->font();
+ displayB = new QLineEdit("0");
+ displayB->setReadOnly(true);
+ displayB->setAlignment(Qt::AlignRight);
+ displayB->setMaxLength(15);
+
+ QFont font = displayA->font();
  font.setPointSize(font.pointSize() + 8);
- display->setFont(font);
+ displayA->setFont(font);
+ displayB->setFont(font);
 
- mainLayout->addWidget(display, 0, 0, 1, 4);
+ mainLayout->addWidget(displayA, 0, 0, 1, 4);
+ mainLayout->addWidget(displayB, 1, 0, 1, 4);
  mainLayout->setSizeConstraint(QLayout::SetFixedSize);
 
  auto createButton = [](const std::string text, auto signal, auto obj, auto slot, int row, int col, auto layout)
@@ -28,7 +35,7 @@ Calculator::Calculator(QWidget *parent)
 
  for (int i = 1; i <= 10; i++)
  {
-  int row = (i-1) / 3 + 1;
+  int row = (i-1) / 3 + 2;
   int col = (i-1) % 3;
   if (i == 10)
    i = 0;
@@ -36,10 +43,12 @@ Calculator::Calculator(QWidget *parent)
   if (i == 0)
    break;
  }
- createButton("+", SIGNAL (clicked()), this, SLOT (plusClicked()), 1, 3, mainLayout);
- createButton("=", SIGNAL (clicked()), this, SLOT (equalsClicked()), 4, 3, mainLayout);
- createButton("*", SIGNAL (clicked()), this, SLOT (timesClicked()), 2, 3, mainLayout);
- createButton("C", SIGNAL (clicked()), this, SLOT (clearClicked()), 3, 3, mainLayout);
+ createButton("+", SIGNAL (clicked()), this, SLOT (plusClicked()), 2, 3, mainLayout);
+ createButton("*", SIGNAL (clicked()), this, SLOT (timesClicked()), 3, 3, mainLayout);
+ createButton("-", SIGNAL (clicked()), this, SLOT (minusClicked()), 4, 3, mainLayout);
+ createButton("/", SIGNAL (clicked()), this, SLOT (dividesClicked()), 5, 3, mainLayout);
+ createButton("C", SIGNAL (clicked()), this, SLOT (clearClicked()), 5, 2, mainLayout);
+// createButton("=", SIGNAL (clicked()), this, SLOT (equalsClicked()), 5, 3, mainLayout);
 
  setLayout(mainLayout);
 }
@@ -49,31 +58,47 @@ void Calculator::digitClicked()
  QToolButton *button = qobject_cast<QToolButton *>(sender());
  int digit = button->text().toInt();
  registerB = registerB * 10 + digit;
- display->setText(std::to_string(registerB).c_str());
+ displayB->setText(std::to_string(registerB).c_str());
 }
 void Calculator::plusClicked()
 {
  registerA += registerB;
  registerB = 0;
- display->setText(std::to_string(registerB).c_str());
+ displayA->setText(std::to_string(registerA).c_str());
+ displayB->setText(std::to_string(registerB).c_str());
+}
+void Calculator::minusClicked()
+{
+ registerA -= registerB;
+ registerB = 0;
+ displayA->setText(std::to_string(registerA).c_str());
+ displayB->setText(std::to_string(registerB).c_str());
 }
 void Calculator::timesClicked()
 { 
- if (registerA == 0)
-  registerA = 1;
  registerA *= registerB;
  registerB = 0;
- display->setText(std::to_string(registerB).c_str());
+ displayA->setText(std::to_string(registerA).c_str());
+ displayB->setText(std::to_string(registerB).c_str());
+}
+void Calculator::dividesClicked()
+{ 
+ registerA /= registerB;
+ registerB = 0;
+ displayA->setText(std::to_string(registerA).c_str());
+ displayB->setText(std::to_string(registerB).c_str());
 }
 void Calculator::equalsClicked()
 {
- display->setText(std::to_string(registerA).c_str());
+ displayA->setText(std::to_string(registerA).c_str());
+ displayB->setText(std::to_string(registerB).c_str());
 }
 void Calculator::clearClicked()
 {
  registerA = 0;
  registerB = 0;
- display->setText(std::to_string(registerB).c_str());
+ displayA->setText(std::to_string(registerA).c_str());
+ displayB->setText(std::to_string(registerB).c_str());
 }
 
 int main(int argc, char **argv)
